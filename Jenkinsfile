@@ -6,7 +6,7 @@ pipeline {
     }
     
     triggers {
-        // SCM trigger watches for changes in the specified branch
+        
         scm('*/main')
     }
     
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     def warFile = sh(returnStdout: true, script: 'ls target/*.war').trim()
-                    def tomcatWebapps = '/path/to/tomcat/webapps' // Change this to your Tomcat webapps directory
+                    def tomcatWebapps = '/opt/tomcat-staging/webapps' 
                     sh "cp ${warFile} ${tomcatWebapps}/"
                 }
             }
