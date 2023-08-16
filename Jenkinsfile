@@ -1,10 +1,23 @@
 pipeline {
     agent any
     
-    environment {
-        MAVEN_HOME = tool 'Maven'
-    }
-    
+    stages {
+        stage('Check and Install Maven') {
+            steps {
+                script {
+                    def mavenHome = tool name: 'Maven', type: 'hudson.tasks.Maven$MavenInstallation'
+                    if (mavenHome) {
+                        echo "Maven is already installed at ${mavenHome}"
+                    } else {
+                        echo "Maven is not installed. Installing now..."
+                        def mvnTool = tool name: 'Maven', type: 'hudson.tasks.Maven$MavenInstaller'
+                        if (!mvnTool) {
+                            error "Failed to install Maven."
+                        }
+                    }
+                }
+            }
+        }
    
     
     stages {
