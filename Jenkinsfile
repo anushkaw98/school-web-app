@@ -5,10 +5,7 @@ pipeline {
         MAVEN_HOME = tool 'Maven'
     }
     
-    triggers {
-        
-        scm('*/main')
-    }
+   
     
     stages {
         stage('Checkout') {
