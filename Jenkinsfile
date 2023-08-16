@@ -5,7 +5,7 @@ pipeline {
         stage('Remove Old .war File') {
             steps {
                 script {
-                    /
+                    
                     sh 'rm -f /opt/tomcat-staging/webapps/school-web-app.war'
                 }
             }
