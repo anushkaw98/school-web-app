@@ -1,40 +1,21 @@
 pipeline {
-    agent any
-    
-    stages {
-        stage('Check and Install Maven') {
+    agent any 
+
+    stages{
+        stage('Build'){
             steps {
-                script {
-                    def mavenHome = tool name: 'Maven', type: 'hudson.tasks.Maven$MavenInstallation'
-                    if (mavenHome) {
-                        echo "Maven is already installed at ${mavenHome}"
-                    } else {
-                        echo "Maven is not installed. Installing now..."
-                        def mvnTool = tool name: 'Maven', type: 'hudson.tasks.Maven$MavenInstaller'
-                        if (!mvnTool) {
-                            error "Failed to install Maven."
-                        }
-                    }
+                sh 'mvn clean package'
+            }
+            post {
+                success {
+                    echo 'Now Archiving...'
+                    archiveArtifacts artifacts: '**/target/*.war'
                 }
             }
         }
    
     
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        
-        stage('Build') {
-            steps {
-                script {
-                    def mvnCmd = "${MAVEN_HOME}/bin/mvn"
-                    sh "${mvnCmd} clean package"
-                }
-            }
-        }
+    
         
         stage('Deploy') {
             steps {
