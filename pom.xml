@@ -6,6 +6,11 @@
     <groupId>com.school</groupId>
     <artifactId>school-web-app</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
     
     <build>
         <plugins>
