@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                dir('path/to/your/maven/project') {
+                dir('/home/anushka/anushka_projects/school_web/school-web-app') {
                     sh 'mvn clean package'
                 }
             }
