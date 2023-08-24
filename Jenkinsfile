@@ -41,12 +41,5 @@ pipeline {
         }
     }
 
-    post {
-        failure {
-            // Add any failure handling steps here
-        }
-        success {
-            // Add any success handling steps here
-        }
-    }
+   
 }
