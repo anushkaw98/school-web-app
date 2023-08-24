@@ -2,31 +2,51 @@ pipeline {
     agent any
 
     stages {
-        stage('Remove Old .war File') {
+        stage('Checkout') {
             steps {
-                script {
-                    
-                    sh 'rm -f /opt/tomcat-staging/webapps/school-web-app.war'
+                // Checkout the code from Git
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build your project using Maven
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Static Code Analysis') {
+            steps {
+                // Run SonarQube analysis
+                withSonarQubeEnv('server-sonar') {
+                    sh 'mvn sonar:sonar'
                 }
             }
         }
 
-        stage('Build .war File') {
+        stage('Deploy') {
             steps {
-                dir('/path/to/your/project') {
-                    
-                    sh 'mvn clean package'
-                }
+                sh  'rm -f /opt/tomcat-staging/webapps/school-web-app.war
+                sh 'cp target/school-web-app.war /opt/tomcat-staging/webapps/'
             }
         }
 
-        stage('Deploy .war to Tomcat') {
+        stage('Restart Tomcat') {
             steps {
-                script {
-                    // Replace 'your-war-file-name.war' and '/path/to/tomcat/webapps/' with actual values
-                    sh 'cp /home/anushka/anushka_projects/school_web/school-web-app/target/school-web-app.war /opt/tomcat-staging/webapps'
-                }
+                // Restart Tomcat
+                sh '/opt/tomcat-staging/bin/shutdown.sh'
+                sh '/opt/tomcat-staging/bin/startup.sh'
             }
+        }
+    }
+
+    post {
+        failure {
+            // Add any failure handling steps here
+        }
+        success {
+            // Add any success handling steps here
         }
     }
 }
