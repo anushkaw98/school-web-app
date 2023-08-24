@@ -12,8 +12,8 @@ pipeline {
         stage('Build') {
             steps {
                 // Build your project using Maven
-                //sh 'mvn clean install'
-                sh 'clean install sonar:sonar'
+                sh 'mvn clean install'
+                
             }
         }
 
@@ -21,7 +21,8 @@ pipeline {
             steps {
                 // Run SonarQube analysis
                 withSonarQubeEnv('server-sonar') {
-                    sh 'mvn sonar:sonar'
+                    //sh 'mvn sonar:sonar'
+                    sh 'clean install sonar:sonar'
                 }
             }
         }
