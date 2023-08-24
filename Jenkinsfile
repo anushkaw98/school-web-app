@@ -34,7 +34,7 @@ pipeline {
             // Check if the WAR file exists
             if (fileExists(warFilePath)) {
                 // If it exists, delete it
-                sh "sudo rm -f ${warFilePath}"
+                sh "rm -f ${warFilePath}"
             }
 
             // Copy the new WAR file
