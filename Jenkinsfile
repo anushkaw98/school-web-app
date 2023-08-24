@@ -26,20 +26,23 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                script {
+    steps {
+        script {
+            // Define the path to the WAR file
+            def warFilePath = '/opt/tomcat-staging/webapps/school-web-app.war'
 
-                    // Check if the WAR file exists
-                    if (fileExists(/opt/tomcat-staging/webapps/school-web-app.war)) {
-                        // If it exists, delete it
-                        sh "rm -f /opt/tomcat-staging/webapps/school-web-app.war"
-                    }
+            // Check if the WAR file exists
+            if (fileExists(warFilePath)) {
+                // If it exists, delete it
+                sh "sudo rm -f ${warFilePath}"
+            }
 
-                    // Copy the new WAR file
-                    sh "cp target/school-web-app.war /opt/tomcat-staging/webapps"
+            // Copy the new WAR file
+            sh "cp target/school-web-app.war /opt/tomcat-staging/webapps"
         }
     }
 }
+
 
 
 
