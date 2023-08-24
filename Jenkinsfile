@@ -21,8 +21,8 @@ pipeline {
             steps {
                 // Run SonarQube analysis
                 withSonarQubeEnv('server-sonar') {
-                    //sh 'mvn sonar:sonar'
-                    sh 'clean install sonar:sonar'
+                    sh 'mvn sonar:sonar'
+                    
                 }
             }
         }
