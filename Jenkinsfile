@@ -46,13 +46,13 @@ pipeline {
 
 
 
-        stage('Restart Tomcat') {
+       /*stage('Restart Tomcat') {
             steps {
                 // Restart Tomcat
                 sh '/opt/tomcat-staging/bin/shutdown.sh'
                 sh '/opt/tomcat-staging/bin/startup.sh'
             }
-        }
+        }  */
     }
 
    
