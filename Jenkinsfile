@@ -27,7 +27,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh  'rm -f /opt/tomcat-staging/webapps/school-web-app.war'
+                sh  'sudo rm -f /opt/tomcat-staging/webapps/school-web-app.war'
                 sh 'cp target/school-web-app.war /opt/tomcat-staging/webapps/'
             }
         }
