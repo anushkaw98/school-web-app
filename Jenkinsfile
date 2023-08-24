@@ -27,10 +27,21 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh  'sudo rm -f /opt/tomcat-staging/webapps/school-web-app.war'
-                sh 'cp target/school-web-app.war /opt/tomcat-staging/webapps/'
-            }
+                script {
+
+                    // Check if the WAR file exists
+                    if (fileExists(/opt/tomcat-staging/webapps/school-web-app.war)) {
+                        // If it exists, delete it
+                        sh "rm -f /opt/tomcat-staging/webapps/school-web-app.war"
+                    }
+
+                    // Copy the new WAR file
+                    sh "cp target/school-web-app.war /opt/tomcat-staging/webapps"
         }
+    }
+}
+
+
 
         stage('Restart Tomcat') {
             steps {
