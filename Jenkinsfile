@@ -12,7 +12,8 @@ pipeline {
         stage('Build') {
             steps {
                 // Build your project using Maven
-                sh 'mvn clean install'
+                //sh 'mvn clean install'
+                sh 'clean install sonar:sonar'
             }
         }
 
