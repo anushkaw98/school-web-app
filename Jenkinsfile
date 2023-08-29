@@ -31,7 +31,7 @@ pipeline {
     steps {
         script {
             // Define the path to the WAR file
-            def warFilePath = '/opt/tomcat-staging/webapps/school-web-app.war'
+            def warFilePath = '/opt/tomcat/webapps/school-web-app.war'
 
             // Check if the WAR file exists
             if (fileExists(warFilePath)) {
@@ -40,7 +40,7 @@ pipeline {
             }
 
             // Copy the new WAR file
-            sh "cp target/school-web-app.war /opt/tomcat-staging/webapps"
+            sh "cp target/school-web-app.war /opt/tomcat/webapps"
         }
     }
 }
@@ -51,8 +51,8 @@ pipeline {
        /*stage('Restart Tomcat') {
             steps {
                 // Restart Tomcat
-                sh '/opt/tomcat-staging/bin/shutdown.sh'
-                sh '/opt/tomcat-staging/bin/startup.sh'
+                sh '/opt/tomcat/bin/shutdown.sh'
+                sh '/opt/tomcat/bin/startup.sh'
             }
         }  */
     }
