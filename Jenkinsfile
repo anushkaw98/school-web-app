@@ -46,7 +46,7 @@ pipeline {
             // Send the report via email
             emailext(
                 subject: 'SonarQube Analysis Report',
-                body: 'Attached is the SonarQube analysis report.',
+                body: 'Attached  the SonarQube analysis report.',
                 attachmentsPattern: "${reportPath}/sonar-report.pdf",
                 to: 'dammithari@gmail.com',
             )
