@@ -26,32 +26,32 @@ pipeline {
         }
 
         stage('Download SonarQube Report') {
-    steps {
-        script {
-            // Get the workspace path
-            def workspacePath = env.WORKSPACE
-
-            // Get the job name
-            def jobName = env.JOB_NAME
-
-            // Define the path to the SonarQube report
-            def reportPath = "${workspacePath}/target/sonar"
-
-            // Create the directory if it doesn't exist
-            sh "mkdir -p ${reportPath}"
-
-            // Download the SonarQube report
-            sh "curl -o ${reportPath}/sonar-report.pdf http://192.168.168.132:9000/api/pdfreport/show?id=${jobName}"
-
-            // Send the report via email
-            emailext(
-                subject: 'SonarQube Analysis Report',
-                body: 'Attached  the SonarQube analysis report.',
-                attachmentsPattern: "${reportPath}/sonar-report.pdf",
-                to: 'dammithari@gmail.com',
-            )
-        }
-    }
+            steps {
+                script {
+                    // Get the workspace path
+                    def workspacePath = env.WORKSPACE
+        
+                    // Get the job name
+                    def jobName = env.JOB_NAME
+        
+                    // Define the path to the SonarQube report
+                    def reportPath = "${workspacePath}/target/sonar"
+        
+                    // Create the directory if it doesn't exist
+                    sh "mkdir -p ${reportPath}"
+        
+                    // Download the SonarQube report
+                    sh "curl -o ${reportPath}/sonar-report.pdf http://192.168.168.132:9000/api/pdfreport/show?id=${jobName}"
+        
+                    // Send the report via email
+                    emailext(
+                        subject: 'SonarQube Analysis Report',
+                        body: 'Attached  the SonarQube analysis report.',
+                        attachmentsPattern: "${reportPath}/sonar-report.pdf",
+                        to: 'dammithari@gmail.com',
+                    )
+                }
+            }
 }
 
         
