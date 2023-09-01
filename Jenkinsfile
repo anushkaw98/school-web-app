@@ -26,25 +26,35 @@ pipeline {
         }
 
         stage('Download SonarQube Report') {
-            steps {
-                // Define the path to the SonarQube report
-                def reportPath = "${JENKINS_HOME}/workspace/${JOB_NAME}/target/sonar"
+    steps {
+        script {
+            // Get the workspace path
+            def workspacePath = env.WORKSPACE
 
-                // Create the directory if it doesn't exist
-                sh "mkdir -p ${reportPath}"
+            // Get the job name
+            def jobName = env.JOB_NAME
 
-                // Download the SonarQube report
-                sh "curl -o ${reportPath}/sonar-report.pdf http://192.168.168.132:9000//api/pdfreport/show?id=${JOB_NAME}"
+            // Define the path to the SonarQube report
+            def reportPath = "${workspacePath}/target/sonar"
 
-                // Send the report via email
-                emailext(
-                    subject: 'SonarQube Analysis Report',
-                    body: 'Attached is the SonarQube analysis report.',
-                    attachmentsPattern: "${reportPath}/sonar-report.pdf",
-                    to: 'dammithari@gmail.com',
-                )
-            }
+            // Create the directory if it doesn't exist
+            sh "mkdir -p ${reportPath}"
+
+            // Download the SonarQube report
+            sh "curl -o ${reportPath}/sonar-report.pdf http://192.168.168.132:9000/api/pdfreport/show?id=${jobName}"
+
+            // Send the report via email
+            emailext(
+                subject: 'SonarQube Analysis Report',
+                body: 'Attached is the SonarQube analysis report.',
+                attachmentsPattern: "${reportPath}/sonar-report.pdf",
+                to: 'dammithari@gmail.com',
+            )
         }
+    }
+}
+
+        
 
         stage('Deploy') {
             steps {
