@@ -13,7 +13,6 @@ pipeline {
             steps {
                 // Build your project using Maven
                 sh 'mvn clean install'
-                
             }
         }
 
@@ -22,40 +21,47 @@ pipeline {
                 // Run SonarQube analysis
                 withSonarQubeEnv('server-sonar') {
                     sh 'mvn sonar:sonar'
-                    
                 }
             }
         }
 
-        stage('Deploy') {
-    steps {
-        script {
-            // Define the path to the WAR file
-            def warFilePath = '/opt/tomcat/webapps/school-web-app.war'
+        stage('Download SonarQube Report') {
+            steps {
+                // Define the path to the SonarQube report
+                def reportPath = "${JENKINS_HOME}/workspace/${JOB_NAME}/target/sonar"
 
-            // Check if the WAR file exists
-            if (fileExists(warFilePath)) {
-                // If it exists, delete it
-                sh "rm -f ${warFilePath}"
+                // Create the directory if it doesn't exist
+                sh "mkdir -p ${reportPath}"
+
+                // Download the SonarQube report
+                sh "curl -o ${reportPath}/sonar-report.pdf http://192.168.168.132:9000//api/pdfreport/show?id=${JOB_NAME}"
+
+                // Send the report via email
+                emailext(
+                    subject: 'SonarQube Analysis Report',
+                    body: 'Attached is the SonarQube analysis report.',
+                    attachmentsPattern: "${reportPath}/sonar-report.pdf",
+                    to: 'dammithari@gmail.com',
+                )
             }
+        }
 
-            // Copy the new WAR file
-            sh "cp target/school-web-app.war /opt/tomcat/webapps"
+        stage('Deploy') {
+            steps {
+                script {
+                    // Define the path to the WAR file
+                    def warFilePath = '/opt/tomcat/webapps/school-web-app.war'
+
+                    // Check if the WAR file exists
+                    if (fileExists(warFilePath)) {
+                        // If it exists, delete it
+                        sh "rm -f ${warFilePath}"
+                    }
+
+                    // Copy the new WAR file
+                    sh "cp target/school-web-app.war /opt/tomcat/webapps"
+                }
+            }
         }
     }
-}
-
-
-
-
-       /*stage('Restart Tomcat') {
-            steps {
-                // Restart Tomcat
-                sh '/opt/tomcat/bin/shutdown.sh'
-                sh '/opt/tomcat/bin/startup.sh'
-            }
-        }  */
-    }
-
-   
 }
